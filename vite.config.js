@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite'
-import ctrlf from 'rollup-plugin-ctrlf'
 
 import react from '@vitejs/plugin-react'
 
