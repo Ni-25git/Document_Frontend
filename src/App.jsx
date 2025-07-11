@@ -8,6 +8,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import DocumentEditor from './components/documents/DocumentEditor';
 import DocumentList from './components/documents/DocumentList';
 import Navbar from './components/layout/Navbar';
+import BackendStatus from './components/layout/BackendStatus';
 import ChangePassword from './components/dashboard/ChangePassword';
 import './App.css';
 
@@ -49,6 +50,7 @@ function App() {
     <Router>
       <div className="App">
         <Toaster position="top-right" />
+        <BackendStatus />
         {user && <Navbar user={user} logout={logout} />}
         <main className="main-content">
           <Routes>

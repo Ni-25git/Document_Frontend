@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import api from '../../api/axios'; // or relative path if not using alias
+import api, { checkBackendHealth } from '../../api/axios'; // or relative path if not using alias
 import toast from 'react-hot-toast';
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
 
@@ -11,7 +11,20 @@ const Login = ({ login }) => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [backendAvailable, setBackendAvailable] = useState(true);
   const navigate = useNavigate();
+
+  // Check backend availability on component mount
+  useEffect(() => {
+    const checkBackend = async () => {
+      const isAvailable = await checkBackendHealth();
+      setBackendAvailable(isAvailable);
+      if (!isAvailable) {
+        toast.error('Backend server is not available. Please try again later.');
+      }
+    };
+    checkBackend();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -32,8 +45,19 @@ const Login = ({ login }) => {
       toast.success('Login successful!');
       navigate('/dashboard');
     } catch (error) {
-      const message = error.response?.data?.message || 'Login failed';
+      let message = error.message;
+      
+      // Provide more specific error messages
+      if (error.response?.status === 404) {
+        message = 'Login service is not available. Please contact support.';
+      } else if (error.response?.status === 401) {
+        message = 'Invalid email or password.';
+      } else if (error.response?.status === 500) {
+        message = 'Server error. Please try again later.';
+      }
+      
       toast.error(message);
+      console.error('Login error:', error);
     } finally {
       setLoading(false);
     }
@@ -46,6 +70,19 @@ const Login = ({ login }) => {
         <p style={{ color: '#666', marginBottom: '30px' }}>
           Sign in to your account to continue
         </p>
+        
+        {!backendAvailable && (
+          <div style={{ 
+            backgroundColor: '#fff3cd', 
+            color: '#856404', 
+            padding: '10px', 
+            borderRadius: '5px', 
+            marginBottom: '20px',
+            border: '1px solid #ffeaa7'
+          }}>
+            ⚠️ Backend server is currently unavailable. Some features may not work.
+          </div>
+        )}
         
         <form onSubmit={handleSubmit}>
           <div className="form-group">
