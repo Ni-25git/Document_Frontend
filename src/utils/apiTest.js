@@ -6,7 +6,14 @@ export const testApiEndpoints = async () => {
     { path: '/', method: 'GET', name: 'Root' },
     { path: '/user/login', method: 'POST', name: 'Login' },
     { path: '/user/register', method: 'POST', name: 'Register' },
+    { path: '/user/verify-email/test', method: 'GET', name: 'Email Verification' },
+    { path: '/user/resend-verification', method: 'POST', name: 'Resend Verification' },
+    { path: '/user/change-password', method: 'POST', name: 'Change Password' },
     { path: '/doc/list', method: 'GET', name: 'Document List' },
+    { path: '/doc/create', method: 'POST', name: 'Create Document' },
+    { path: '/doc/get/test', method: 'GET', name: 'Get Document' },
+    { path: '/doc/versions/test', method: 'GET', name: 'Document Versions' },
+    { path: '/doc/search', method: 'GET', name: 'Search Documents' },
   ];
 
   const results = [];
@@ -18,6 +25,8 @@ export const testApiEndpoints = async () => {
         response = await api.get(endpoint.path);
       } else if (endpoint.method === 'POST') {
         response = await api.post(endpoint.path, {});
+      } else if (endpoint.method === 'DELETE') {
+        response = await api.delete(endpoint.path);
       }
       
       results.push({
@@ -43,6 +52,7 @@ export const testApiEndpoints = async () => {
 // Log API test results to console for debugging
 export const logApiTestResults = async () => {
   console.log('🔍 Testing API endpoints...');
+  console.log('Base URL:', 'https://document-backend-4.onrender.com/api');
   const results = await testApiEndpoints();
   
   console.table(results);

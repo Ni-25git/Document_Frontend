@@ -11,7 +11,7 @@ const api = axios.create({
 // Function to check if backend is available
 export const checkBackendHealth = async () => {
   try {
-    const response = await axios.get(API_BASE_URL, { 
+    const response = await axios.get('https://document-backend-4.onrender.com', { 
       timeout: 5000,
       headers: {
         'Content-Type': 'application/json'

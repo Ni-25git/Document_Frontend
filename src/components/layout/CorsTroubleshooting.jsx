@@ -16,7 +16,10 @@ app.use(cors({
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-}));`;
+}));
+
+// API Routes should be prefixed with /api
+app.use('/api', apiRoutes);`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(corsConfig);
@@ -78,6 +81,31 @@ app.use(cors({
           <p>
             Your backend at <strong>document-backend-4.onrender.com</strong> is not configured to allow requests from your frontend at <strong>document-frontend-b1881wmjg-nipun-sehrawat-projects.vercel.app</strong>
           </p>
+        </div>
+
+        <div style={{ marginBottom: '20px' }}>
+          <h3>API Structure:</h3>
+          <p>
+            <strong>Base URL:</strong> https://document-backend-4.onrender.com/api
+            <br />
+            <strong>Example endpoints:</strong>
+          </p>
+          <div style={{
+            backgroundColor: '#f8f9fa',
+            border: '1px solid #e9ecef',
+            borderRadius: '5px',
+            padding: '15px',
+            fontSize: '12px'
+          }}>
+            <code>
+              POST /api/user/login<br/>
+              POST /api/user/register<br/>
+              GET /api/user/verify-email/:token<br/>
+              GET /api/doc/list?userId=:id<br/>
+              POST /api/doc/create<br/>
+              GET /api/doc/get/:id
+            </code>
+          </div>
         </div>
 
         <div style={{ marginBottom: '20px' }}>
@@ -161,6 +189,16 @@ app.use(cors({
               style={{ color: '#007bff', textDecoration: 'none' }}
             >
               https://document-backend-4.onrender.com
+              <ExternalLink size={14} style={{ marginLeft: '5px' }} />
+            </a>
+            <br/>
+            <a 
+              href="https://document-backend-4.onrender.com/api" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{ color: '#007bff', textDecoration: 'none' }}
+            >
+              https://document-backend-4.onrender.com/api
               <ExternalLink size={14} style={{ marginLeft: '5px' }} />
             </a>
           </p>
