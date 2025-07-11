@@ -1,19 +1,31 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://document-backend-3.onrender.com';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ' https://document-backend-4.onrender.com';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
+  timeout: 10000, // 10 second timeout
 });
 
 // Function to check if backend is available
 export const checkBackendHealth = async () => {
   try {
-    const response = await axios.get(API_BASE_URL, { timeout: 5000 });
+    const response = await axios.get(API_BASE_URL, { 
+      timeout: 5000,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     return response.status === 200;
   } catch (error) {
-    console.error('Backend health check failed:', error);
+    console.error('Backend health check failed:', error.message);
+    
+    // Check if it's a CORS error
+    if (error.message.includes('CORS') || error.message.includes('Access-Control-Allow-Origin')) {
+      console.error('CORS Error: Backend needs to allow requests from this domain');
+    }
+    
     return false;
   }
 };
@@ -24,6 +36,10 @@ api.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+  
+  // Add CORS headers to request
+  config.headers['Content-Type'] = 'application/json';
+  
   return config;
 });
 
@@ -54,8 +70,12 @@ api.interceptors.response.use(
           error.message = error.response.data?.message || 'An error occurred.';
       }
     } else if (error.request) {
-      // Network error
-      error.message = 'Network error. Please check your connection.';
+      // Network error or CORS error
+      if (error.message.includes('CORS') || error.message.includes('Access-Control-Allow-Origin')) {
+        error.message = 'CORS Error: Backend server needs to allow requests from this domain. Please contact the backend administrator.';
+      } else {
+        error.message = 'Network error. Please check your connection.';
+      }
     } else {
       // Other error
       error.message = 'An unexpected error occurred.';

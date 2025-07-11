@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { checkBackendHealth } from '../../api/axios';
 import { logApiTestResults } from '../../utils/apiTest';
-import { AlertCircle, CheckCircle, Bug } from 'lucide-react';
+import { AlertCircle, CheckCircle, Bug, Globe, Settings } from 'lucide-react';
+import CorsTroubleshooting from './CorsTroubleshooting';
 
 const BackendStatus = () => {
   const [backendStatus, setBackendStatus] = useState({
     available: true,
     loading: true,
-    lastChecked: null
+    lastChecked: null,
+    corsError: false
   });
+  const [showCorsGuide, setShowCorsGuide] = useState(false);
 
   const checkStatus = async () => {
     setBackendStatus(prev => ({ ...prev, loading: true }));
@@ -17,7 +20,8 @@ const BackendStatus = () => {
       setBackendStatus({
         available: isAvailable,
         loading: false,
-        lastChecked: new Date()
+        lastChecked: new Date(),
+        corsError: false
       });
       
       // If backend is available but we want to test endpoints, uncomment this:
@@ -25,16 +29,22 @@ const BackendStatus = () => {
       //   logApiTestResults();
       // }
     } catch (error) {
+      const isCorsError = error.message.includes('CORS') || error.message.includes('Access-Control-Allow-Origin');
       setBackendStatus({
         available: false,
         loading: false,
-        lastChecked: new Date()
+        lastChecked: new Date(),
+        corsError: isCorsError
       });
     }
   };
 
   const handleDebugClick = () => {
     logApiTestResults();
+  };
+
+  const handleCorsFixClick = () => {
+    setShowCorsGuide(true);
   };
 
   useEffect(() => {
@@ -64,44 +74,80 @@ const BackendStatus = () => {
 
   if (!backendStatus.available) {
     return (
-      <div style={{
-        position: 'fixed',
-        top: '10px',
-        right: '10px',
-        padding: '10px 15px',
-        backgroundColor: '#f8d7da',
-        color: '#721c24',
-        borderRadius: '5px',
-        fontSize: '12px',
-        zIndex: 1000,
-        display: 'flex',
-        alignItems: 'center',
-        gap: '5px',
-        maxWidth: '300px'
-      }}>
-        <AlertCircle size={16} />
-        <div>
-          <strong>Backend Unavailable</strong>
-          <br />
-          Some features may not work. Please try again later.
-          <br />
-          <button 
-            onClick={handleDebugClick}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#721c24',
-              textDecoration: 'underline',
-              cursor: 'pointer',
-              fontSize: '10px',
-              marginTop: '5px'
-            }}
-          >
-            <Bug size={12} style={{ marginRight: '3px' }} />
-            Debug API
-          </button>
+      <>
+        <div style={{
+          position: 'fixed',
+          top: '10px',
+          right: '10px',
+          padding: '10px 15px',
+          backgroundColor: backendStatus.corsError ? '#fff3cd' : '#f8d7da',
+          color: backendStatus.corsError ? '#856404' : '#721c24',
+          borderRadius: '5px',
+          fontSize: '12px',
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '5px',
+          maxWidth: '350px'
+        }}>
+          {backendStatus.corsError ? <Globe size={16} /> : <AlertCircle size={16} />}
+          <div>
+            <strong>
+              {backendStatus.corsError ? 'CORS Configuration Error' : 'Backend Unavailable'}
+            </strong>
+            <br />
+            {backendStatus.corsError ? (
+              <>
+                Backend server needs to allow requests from this domain.
+                <br />
+                <strong>Frontend:</strong> document-frontend-6m93-git-main-nipun-sehrawat-projects.vercel.app
+                <br />
+                <strong>Backend:</strong> document-backend-3.onrender.com
+              </>
+            ) : (
+              'Some features may not work. Please try again later.'
+            )}
+            <br />
+            <div style={{ marginTop: '5px', display: 'flex', gap: '10px' }}>
+              <button 
+                onClick={handleDebugClick}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: backendStatus.corsError ? '#856404' : '#721c24',
+                  textDecoration: 'underline',
+                  cursor: 'pointer',
+                  fontSize: '10px'
+                }}
+              >
+                <Bug size={12} style={{ marginRight: '3px' }} />
+                Debug API
+              </button>
+              {backendStatus.corsError && (
+                <button 
+                  onClick={handleCorsFixClick}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#856404',
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                    fontSize: '10px'
+                  }}
+                >
+                  <Settings size={12} style={{ marginRight: '3px' }} />
+                  Fix CORS
+                </button>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
+        
+        <CorsTroubleshooting 
+          isVisible={showCorsGuide} 
+          onClose={() => setShowCorsGuide(false)} 
+        />
+      </>
     );
   }
 
