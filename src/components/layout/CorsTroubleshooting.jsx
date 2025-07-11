@@ -9,7 +9,7 @@ const cors = require('cors');
 
 app.use(cors({
   origin: [
-    'https://document-frontend-6m93-git-main-nipun-sehrawat-projects.vercel.app',
+    'https://document-frontend-b1881wmjg-nipun-sehrawat-projects.vercel.app',
     'http://localhost:5173',
     'http://localhost:3000'
   ],
@@ -76,7 +76,7 @@ app.use(cors({
         <div style={{ marginBottom: '20px' }}>
           <h3>Current Issue:</h3>
           <p>
-            Your backend at <strong>document-backend-3.onrender.com</strong> is not configured to allow requests from your frontend at <strong>document-frontend-6m93-git-main-nipun-sehrawat-projects.vercel.app</strong>
+            Your backend at <strong>document-backend-4.onrender.com</strong> is not configured to allow requests from your frontend at <strong>document-frontend-b1881wmjg-nipun-sehrawat-projects.vercel.app</strong>
           </p>
         </div>
 
@@ -141,7 +141,7 @@ app.use(cors({
             padding: '15px'
           }}>
             <code>
-              Access-Control-Allow-Origin: https://document-frontend-6m93-git-main-nipun-sehrawat-projects.vercel.app<br/>
+              Access-Control-Allow-Origin: https://document-frontend-b1881wmjg-nipun-sehrawat-projects.vercel.app<br/>
               Access-Control-Allow-Credentials: true<br/>
               Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS<br/>
               Access-Control-Allow-Headers: Content-Type, Authorization
@@ -155,12 +155,12 @@ app.use(cors({
             After implementing the CORS fix, test your backend by visiting:
             <br/>
             <a 
-              href="https://document-backend-3.onrender.com" 
+              href="https://document-backend-4.onrender.com" 
               target="_blank" 
               rel="noopener noreferrer"
               style={{ color: '#007bff', textDecoration: 'none' }}
             >
-              https://document-backend-3.onrender.com
+              https://document-backend-4.onrender.com
               <ExternalLink size={14} style={{ marginLeft: '5px' }} />
             </a>
           </p>

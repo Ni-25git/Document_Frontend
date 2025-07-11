@@ -100,9 +100,9 @@ const BackendStatus = () => {
               <>
                 Backend server needs to allow requests from this domain.
                 <br />
-                <strong>Frontend:</strong> document-frontend-6m93-git-main-nipun-sehrawat-projects.vercel.app
+                <strong>Frontend:</strong> document-frontend-b1881wmjg-nipun-sehrawat-projects.vercel.app
                 <br />
-                <strong>Backend:</strong> document-backend-3.onrender.com
+                <strong>Backend:</strong> document-backend-4.onrender.com
               </>
             ) : (
               'Some features may not work. Please try again later.'
