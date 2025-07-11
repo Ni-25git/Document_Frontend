@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api/axios';
 import toast from 'react-hot-toast';
 import { Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 
@@ -29,7 +29,7 @@ const ForgotPassword = () => {
     }
     setLoading(true);
     try {
-      await axios.post('/api/user/forgot-password', { email, newPassword });
+      await api.post('/user/forgot-password', { email, newPassword });
       setSuccess(true);
       toast.success('Password updated successfully!');
     } catch (error) {
