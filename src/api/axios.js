@@ -5,14 +5,14 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://document-back
 const api = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
-  timeout: 10000, // 10 second timeout
+  timeout: 30000, // 30 second timeout
 });
 
 // Function to check if backend is available
 export const checkBackendHealth = async () => {
   try {
     const response = await axios.get('https://document-backend-4.onrender.com', { 
-      timeout: 5000,
+      timeout: 30000, // 30 seconds
       headers: {
         'Content-Type': 'application/json'
       }
